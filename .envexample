@@ -1,0 +1,4 @@
+DB_NAME=nome_database_local
+DB_USER=user_name_mysql
+DB_PASSWORD=password_mysql
+DB_HOST=127.0.0.1
