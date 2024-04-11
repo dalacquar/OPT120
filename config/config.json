@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "",
-    "database": "teste_database",
+    "password": "root",
+    "database": "opt120db",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }
