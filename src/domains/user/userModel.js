@@ -1,14 +1,14 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require("../../db.js");
 
-module.exports = db.define("user", {
+module.exports = db.define("users", {
   id: {
-    type: DataTypes.INTEGER.UNSIGNED,
+    type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
   },
-  nome: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -16,5 +16,13 @@ module.exports = db.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
+  },
+  phone: {
+    type: DataTypes.STRING,
+    allowNull: true, // Permitindo que o número de telefone seja opcional
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
 });

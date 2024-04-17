@@ -1,12 +1,31 @@
 const models = require("../../models");
+const bcrypt = require("bcrypt");
 
 module.exports = {
+  async addActivity(req, res) {
+    const { nome, descricao } = req.body;
+
+    try {
+      const newActivity = await models.Activity.create({
+        nome: nome,
+        descricao: descricao,
+      });
+      res.status(201).json(newActivity);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: { code: 500, message: "Internal server error" } });
+    }
+  },
+
   async findAll(req, res) {
     try {
       const activities = await models.Activity.findAll();
       res.json(activities);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res
+        .status(error.ck)
+        .json({ error: { code: 500, message: "Internal server error" } });
     }
   },
 
@@ -14,48 +33,40 @@ module.exports = {
     try {
       const activity = await models.Activity.findByPk(req.params.id);
       if (!activity) {
-        res.status(404).json({ error: "Activity not found" });
-        return;
+        return res
+          .status(404)
+          .json({ error: { code: 404, message: "Activity not found" } });
       }
       res.json(activity);
     } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
-
-  async addActivity(req, res) {
-    try {
-      const newActivity = await models.Activity.create({
-        nome: req.body.nome,
-        descricao: req.body.descricao,
-      });
-      res.json(newActivity);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+      res
+        .status(500)
+        .json({ error: { code: 500, message: "Internal server error" } });
     }
   },
 
   async updateActivity(req, res) {
     try {
-      const [rowsUpdated] = await models.Activity.update(
-        {
-          nome: req.body.nome,
-          descricao: req.body.descricao,
-        },
-        {
-          where: {
-            id: req.params.id,
-          },
-        }
-      );
-      if (rowsUpdated === 0) {
-        res.status(404).json({ error: "Activity not found" });
-        return;
+      const { nome, descricao } = req.body;
+
+      const activity = await models.Activity.findByPk(req.params.id);
+      if (!activity) {
+        return res
+          .status(404)
+          .json({ error: { code: 404, message: "Activity not found" } });
       }
-      const updatedActivity = await models.Activity.findByPk(req.params.id);
-      res.json(updatedActivity);
+
+      // Atualiza apenas os campos fornecidos no corpo da requisição
+      if (nome) activity.nome = nome;
+      if (descricao) activity.descricao = descricao;
+
+      await activity.save();
+
+      res.json(activity);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res
+        .status(500)
+        .json({ error: { code: 500, message: "Internal server error" } });
     }
   },
 
@@ -67,13 +78,16 @@ module.exports = {
         },
       });
       if (deletedRows === 0) {
-        res.status(404).json({ error: "Activity not found" });
-        return;
+        return res
+          .status(404)
+          .json({ error: { code: 404, message: "Activity not found" } });
       }
       const activities = await models.Activity.findAll();
       res.json(activities);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res
+        .status(500)
+        .json({ error: { code: 500, message: "Internal server error" } });
     }
   },
 };

@@ -3,10 +3,9 @@ const db = require("../../db.js");
 const User = require("../user/userModel.js");
 const Activity = require("../activity/activityModel.js");
 
-const Delivery = db.define("delivery", {});
+const Delivery = db.define("deliveries", {});
 
-// Definição do relacionamento muitos-para-muitos entre User e Activity utilizando Delivery como a tabela intermediária
-User.belongsToMany(Activity, { through: Delivery });
-Activity.belongsToMany(User, { through: Delivery });
+Delivery.belongsTo(User, { foreignKey: "userId" });
+Delivery.belongsTo(Activity, { foreignKey: "activityId" });
 
 module.exports = Delivery;

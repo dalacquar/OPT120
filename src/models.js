@@ -9,6 +9,6 @@ const Delivery = require("./domains/delivery/deliveryModel.js");
 
 module.exports = {
   User,
-  Activity,
   Delivery,
+  Activity,
 };

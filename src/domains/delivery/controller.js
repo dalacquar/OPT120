@@ -1,12 +1,31 @@
 const models = require("../../models");
+const bcrypt = require("bcrypt");
 
 module.exports = {
+  async addDelivery(req, res) {
+    const { activityId, userId } = req.body;
+
+    try {
+      const newDelivery = await models.Delivery.create({
+        activityId: activityId,
+        userId: userId,
+      });
+      res.status(201).json(newDelivery);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: { code: 500, message: "Internal server error" } });
+    }
+  },
+
   async findAll(req, res) {
     try {
       const deliveries = await models.Delivery.findAll();
       res.json(deliveries);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res
+        .status(error.ck)
+        .json({ error: { code: 500, message: "Internal server error" } });
     }
   },
 
@@ -14,48 +33,34 @@ module.exports = {
     try {
       const delivery = await models.Delivery.findByPk(req.params.id);
       if (!delivery) {
-        res.status(404).json({ error: "Delivery not found" });
-        return;
+        return res
+          .status(404)
+          .json({ error: { code: 404, message: "Delivery not found" } });
       }
       res.json(delivery);
     } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
-
-  async addDelivery(req, res) {
-    try {
-      const newDelivery = await models.Delivery.create({
-        userId: req.body.userId,
-        activityId: req.body.activityId,
-      });
-      res.json(newDelivery);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+      res
+        .status(500)
+        .json({ error: { code: 500, message: "Internal server error" } });
     }
   },
 
   async updateDelivery(req, res) {
     try {
-      const [rowsUpdated] = await models.Delivery.update(
-        {
-          userId: req.body.userId,
-          activityId: req.body.activityId,
-        },
-        {
-          where: {
-            id: req.params.id,
-          },
-        }
-      );
-      if (rowsUpdated === 0) {
-        res.status(404).json({ error: "Delivery not found" });
-        return;
+      const delivery = await models.Delivery.findByPk(req.params.id);
+      if (!delivery) {
+        return res
+          .status(404)
+          .json({ error: { code: 404, message: "Delivery not found" } });
       }
-      const updatedDelivery = await models.Delivery.findByPk(req.params.id);
-      res.json(updatedDelivery);
+
+      await delivery.save();
+
+      res.json(delivery);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res
+        .status(500)
+        .json({ error: { code: 500, message: "Internal server error" } });
     }
   },
 
@@ -67,13 +72,16 @@ module.exports = {
         },
       });
       if (deletedRows === 0) {
-        res.status(404).json({ error: "Delivery not found" });
-        return;
+        return res
+          .status(404)
+          .json({ error: { code: 404, message: "Delivery not found" } });
       }
       const deliveries = await models.Delivery.findAll();
       res.json(deliveries);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res
+        .status(500)
+        .json({ error: { code: 500, message: "Internal server error" } });
     }
   },
 };
