@@ -19,7 +19,7 @@ module.exports = db.define("users", {
   },
   phone: {
     type: DataTypes.STRING,
-    allowNull: true, // Permitindo que o número de telefone seja opcional
+    allowNull: true,
   },
   password: {
     type: DataTypes.STRING,

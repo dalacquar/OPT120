@@ -10,6 +10,10 @@ const Activity = db.define("activities", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  date_limit: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
 });
 
 module.exports = Activity;

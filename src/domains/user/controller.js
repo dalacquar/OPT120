@@ -4,14 +4,19 @@ const bcrypt = require("bcrypt");
 module.exports = {
   async addUser(req, res) {
     const { name, email, phone, password } = req.body;
+    console.log("entrou")
+    console.log(name, email, password)
 
     try {
+      console.log("entro no try")
       const userFound = await models.User.findOne({ where: { email: email } });
+      console.log("tento pega o user")
       if (userFound) {
         return res
           .status(400)
           .json({ error: { code: 400, message: "User already exists" } });
       }
+      console.log("nao acho user")
 
       const hashedPassword = await bcrypt.hash(password, 10);
       const newUser = await models.User.create({
@@ -20,8 +25,9 @@ module.exports = {
         phone: phone,
         password: hashedPassword,
       });
-      res.status(201).json(newUser); // 201 - Created
+      res.status(201).json(newUser);
     } catch (error) {
+      console.log(error)
       res
         .status(500)
         .json({ error: { code: 500, message: "Internal server error" } });

@@ -3,10 +3,11 @@ const bcrypt = require("bcrypt");
 
 module.exports = {
   async addDelivery(req, res) {
-    const { activityId, userId } = req.body;
+    const { activityId, userId, evaluation } = req.body;
 
     try {
       const newDelivery = await models.Delivery.create({
+        evaluation: evaluation,
         activityId: activityId,
         userId: userId,
       });

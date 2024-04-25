@@ -3,12 +3,13 @@ const bcrypt = require("bcrypt");
 
 module.exports = {
   async addActivity(req, res) {
-    const { nome, descricao } = req.body;
+    const { nome, descricao, date_limit} = req.body;
 
     try {
       const newActivity = await models.Activity.create({
         nome: nome,
         descricao: descricao,
+        date_limit: date_limit
       });
       res.status(201).json(newActivity);
     } catch (error) {

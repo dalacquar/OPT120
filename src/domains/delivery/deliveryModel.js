@@ -3,7 +3,12 @@ const db = require("../../db.js");
 const User = require("../user/userModel.js");
 const Activity = require("../activity/activityModel.js");
 
-const Delivery = db.define("deliveries", {});
+const Delivery = db.define("deliveries", {
+    evaluation: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },}
+);
 
 Delivery.belongsTo(User, { foreignKey: "userId" });
 Delivery.belongsTo(Activity, { foreignKey: "activityId" });
