@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn("deliveries", "evaluation", {
       allowNull: true,
-      type: Sequelize.INTEGER,
+      type: Sequelize.DECIMAL,
     });
   },
 

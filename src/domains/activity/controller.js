@@ -3,16 +3,18 @@ const bcrypt = require("bcrypt");
 
 module.exports = {
   async addActivity(req, res) {
-    const { nome, descricao, date_limit} = req.body;
+    const { nome, descricao, date_limit } = req.body;
+    console.log(nome, descricao, date_limit);
 
     try {
       const newActivity = await models.Activity.create({
         nome: nome,
         descricao: descricao,
-        date_limit: date_limit
+        date_limit: date_limit,
       });
       res.status(201).json(newActivity);
     } catch (error) {
+      console.log(error);
       res
         .status(500)
         .json({ error: { code: 500, message: "Internal server error" } });
