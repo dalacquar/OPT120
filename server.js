@@ -1,12 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const sequelize = require("./src/db.js");
+const cors = require("cors");
 const routes = require("./src/routes.js"); // Importe as rotas definidas em routes.js
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
 // Middleware para iniciar a transação antes de cada requisição
 app.use((req, res, next) => {

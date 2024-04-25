@@ -5,6 +5,6 @@ const authMiddleware = require("../../jwt/authMiddleware");
 const controller = require("./controller");
 const validations = require("./validations");
 
-router.post("/login", validations.authLogin, controller.authLogin);
+router.post("/login", controller.authLogin);
 
 module.exports = router;
