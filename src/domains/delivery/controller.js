@@ -1,18 +1,31 @@
+const { getUserFromToken } = require("../../jwt/jwtUtils");
 const models = require("../../models");
 const bcrypt = require("bcrypt");
 
 module.exports = {
   async addDelivery(req, res) {
-    const { activityId, userId, evaluation } = req.body;
+    const { activityId, evaluation } = req.body;
+
+    console.log(evaluation);
+
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) {
+      return res.status(401).json({
+        error: { code: 401, message: "Token de autenticação não fornecido" },
+      });
+    }
+
+    const user = await getUserFromToken(authHeader.split(" ")[1]);
 
     try {
       const newDelivery = await models.Delivery.create({
         evaluation: evaluation,
         activityId: activityId,
-        userId: userId,
+        userId: user.id,
       });
       res.status(201).json(newDelivery);
     } catch (error) {
+      console.log(error);
       res
         .status(500)
         .json({ error: { code: 500, message: "Internal server error" } });
